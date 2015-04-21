@@ -4,7 +4,7 @@ import os
 import sys
 # define variables
 players=[0,1]
-names=["Player1","Player2"]
+names=["P1","P2"]
 masterdice=[4,6,8,10,12,20]
 dice=[[],[]] #
 choice=[0,0]
@@ -29,9 +29,8 @@ def round(matchScore):
 			
 		#this section we get players to select a die and we verify that their choice is valid
 		for n in players:
-			print dice[n]
 			while choice[n] not in dice[n]:
-				printDice(n,dice[n])
+				print ".==.==.==.==.==.==.\n{0}\n'=='=='=='=='=='=='".format(formatDice(dice[n]))
 				choice[n]=raw_input("{0} choose your die:".format(names[n]))
 				if choice[n]=="q":
 					shouldQuit=quitGame()
@@ -87,30 +86,29 @@ def round(matchScore):
 		for n in players:
 			dice[n].remove(choice[n])
 			
-def printCentered(str):
-	for x in range(0,int(40-len(str)/2)):
-		print "a"
-	print str	
 	
-def printDice(player,Dice,):
-	sys.stdout.write("-------------------")
-	sys.stdout.write("|")
-	for x in Dice:
-		if Dice[x] in masterdice:
-			sys.stdout.write(Dice[x])
-			
-				
+def formatDice(Dice):
+	diceString=[]
+	for x in masterdice:
+		if x in Dice:
+			diceString.append(str(x))
+		else:
+			diceString.append("  ")
+	return "|{0:>2}|{1:>2}|{2:>2}|{3:>2}|{4:>2}|{5:>2}|".format(diceString[0],diceString[1],diceString[2],diceString[3],diceString[4],diceString[5])
+
 def displaySummary(dice,choice,roll,gameScore,matchScore,names,players):
 	#prints out the Round Summary
 	os.system('cls')
-	printCentered("Round Summary")
-	for n in players:
-		print "{0} started with these dice:{1}\n and chose to roll the D{3}\n\n".format(names[n],dice[n],choice[n])
-		print "Player2 started with these dice:",dice[1],"\n","and chose to roll the D",choice[1],"\n\n"
-		print "Player1 rolled a",roll[0],"and Player2 rolled a",roll[1]
-		print "The current gameScore:"
-		print "Player1 =",gameScore[0]
-		print "Player2 =",gameScore[1]
+	print '{:^78}'.format("Round Results"),
+	print '{:^80}'.format("============="),
+	print '{0:^39}{1:^40}'.format(names[0],names[1]),
+	print '{0:^39}{1:^40}'.format(".==.==.==.==.==.==.",".==.==.==.==.==.==."),
+	print '{0:>29}{1:^20}{2:<30}'.format(formatDice(dice[0]),"Starting Dice",formatDice(dice[1])),
+	print '{0:^39}{1:^40}'.format("'=='=='=='=='=='=='","'=='=='=='=='=='=='")
+	print '{0:>11}{1}{2}{3}{4:^22}{5}{6}{7}'.format(" ","   "*masterdice.index(choice[0]),"[]","   "*(5-masterdice.index(choice[0])),"Chosen Die","   "*masterdice.index(choice[1]),"[]","   "*(5-masterdice.index(choice[1])))
+	print
+	print '{0:>20}{1:^39}{2}'.format(roll[0],"Roll Result  ",roll[1])
+
 
 round(matchScore)
 
